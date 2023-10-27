@@ -2,6 +2,8 @@
  * @description 环境配置封装
  * @author 刘永奇
  */
+
+
 const env = import.meta.env.MODE || 'prod';
 const EnvConfig = {
   development:{
@@ -20,5 +22,6 @@ const EnvConfig = {
 export default {
   env,
   mock:true,
+  namespace:'manager',
   ...EnvConfig[env]
 }
