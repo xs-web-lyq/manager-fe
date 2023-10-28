@@ -4,11 +4,11 @@
  */
 import axios from "axios"
 import config from "../config"
-import {useRouter} from 'vue-router'
+
 import { ElMessage } from "element-plus"
 
-const router = useRouter()
-const TOKEN_INVALID = 'Token认证失败，请重新登录'
+
+const TOKEN_INVALID = 'Token认证失败,请重新登录'
 const NETWORK_ERROR = '网络异常，稍后重试'
 
 // 实例化axiox，被指全局请求配置
@@ -36,7 +36,7 @@ instance.interceptors.response.use((res)=>{
   }else if(code === 4001){
     ElMessage.error(TOKEN_INVALID)
     setTimeout(()=>{
-      router.push({name:'Login'})
+      this.$router.push({name:'Login'})
     },10000)
     return Promise.reject(TOKEN_INVALID)
   }else{
@@ -54,6 +54,9 @@ function request(options){
   options.method = options.method || 'get'
   if(options.method.toLowerCase() == 'get'){
     options.params = options.data
+  }
+  if(typeof options.mock !== "undefined"){
+    config.mock = options.mock
   }
   // 当为生产环境为了安全起见，将baseURL直接复制为配置选项中baseApi
   if(config.env === 'production'){

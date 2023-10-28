@@ -1,16 +1,16 @@
 import {createRouter,createWebHashHistory} from 'vue-router'
 import Home from '../components/Home.vue'
-import Welcome from '../components/Welcome.vue'
-import Login from '../components/Login.vue'
+
 const routes = [
   {  
     path:'/',
     name:'Home',
-    // 写错属性名，该死
     component:Home,
+    redirect:'/welcome',
     meta:{
       title:'首页'
     },
+    // 子路由：当需要在当前页面通过路由跳转，切换页面中一部分页面时使用子路由，在父页面中使用router-view动态展示
     children:[
       {
         name:'Welcome',
@@ -18,17 +18,17 @@ const routes = [
         meta:{
           title:'欢迎页'
         },
-        component: Welcome
-      },{
-        name:'Login',
-        path:'login',
-        // 可以添加权限
-        meta:{
-          title:'登录'
-        },
-        component:Login,
+        component:()=>import('../views/Welcome.vue')
       }
     ]
+  },{
+    name:'Login',
+    path:'/login',
+    // 可以添加权限
+    meta:{
+      title:'登录'
+    },
+    component:()=>import('../views/Login.vue')
   }
 ]
 

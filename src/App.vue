@@ -5,16 +5,9 @@
 <script>
   export default {
     name:'App',
-    mounted(){
-      // console.log(this.$storage);
-      
-      this.$storage.setItem("userInfo",{name:'liu',age:22})
-      // this.$storage.clearAll()
-      // console.log(this.$storage.getItem("userInfo"));
-    }
   }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+@import './assets/style/reset.css';
 </style>
