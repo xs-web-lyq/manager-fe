@@ -3,7 +3,7 @@
  * @author 刘永奇
  */
 
-import config from '../config'
+import config from '@/config'
 export default {
   setItem(key,val){
     let storage = this.getStorage()

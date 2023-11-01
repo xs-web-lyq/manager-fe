@@ -8,7 +8,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="userPwd">
-          <el-input type="password" placeholder="请输入密码" prefix-icon="View" v-model="user.userPwd"/>
+          <el-input type="password" placeholder="请输入密码" prefix-icon="View" v-model="user.userPwd" />
         </el-form-item>
         <el-form-item>
           <el-button class="login-btn" type="primary" @click="login">登录</el-button>
@@ -22,36 +22,37 @@
 
 
 export default {
-  name:'Login',
-  data(){
+  name: 'Login',
+  data() {
     return {
-      user:{
-        userName:'',
-        userPwd:''
+      user: {
+        userName: '',
+        userPwd: ''
       },
-      rules:{
-        userName:[
+      rules: {
+        userName: [
           {
-            required:true,massage:"请输入用户名",trigger:'blur'
+            required: true, massage: "请输入用户名", trigger: 'blur'
           }
         ],
-        userPwd:[
+        userPwd: [
           {
-            required:true,message:"请输入密码",trigger:'blur'
+            required: true, message: "请输入密码", trigger: 'blur'
           }
         ]
       }
     }
   },
-  methods:{
-    login(){
-      this.$refs.userForm.validate((valid)=>{
-        if(valid){
-          this.$api.login(this.user).then((res)=>{
-            this.$store.commit("saveUserInfo",res)
+  methods: {
+    login() {
+      this.$refs.userForm.validate((valid) => {
+        if (valid) {
+
+          this.$api.login(this.user).then((res) => {
+            this.$store.commit("saveUserInfo", res)
             this.$router.push("/welcome")
           })
-        }else{
+        } else {
           return false
         }
       })
@@ -99,27 +100,30 @@ export default {
 }
 </script>
 <style lang='scss'>
-.login-wrapper{
+.login-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  width:100vw;
+  width: 100vw;
   height: 100vh;
   background: #e5f0fb;
-  .modal{
-    width:500px;
+
+  .modal {
+    width: 500px;
     padding: 50px;
-    border-radius:4px ;
+    border-radius: 4px;
     background: #ffffff;
     box-shadow: 0px 0px 10px 3px #c7c9cb4d;
-    .title{
+
+    .title {
       text-align: center;
       font-size: 50px;
       line-height: 1.5;
-      padding-bottom:30px;
+      padding-bottom: 30px;
     }
-    .login-btn{
-      width:100%;
+
+    .login-btn {
+      width: 100%;
     }
   }
 }
