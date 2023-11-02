@@ -30,9 +30,9 @@
         </el-table-column>
         <el-table-column label="操作" width="220">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="handleAdd(2, scope.row)">新增</el-button>
-            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button link type="danger" size="small" @click="handleDel(scope.row._id)">删除</el-button>
+            <el-button type="primary" size="small" @click="handleAdd(2, scope.row)">新增</el-button>
+            <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="danger" size="small" @click="handleDel(scope.row._id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -237,7 +237,7 @@ export default {
 <style lang='scss' scoped>
 .user-manage {
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .query-form {

@@ -1,5 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../components/Home.vue";
+import storage from "../utils/storage";
+import api from "../api";
+import utils from "../utils/utils";
 
 const routes = [
   {
@@ -20,30 +23,38 @@ const routes = [
         },
         component: () => import("../views/Welcome.vue"),
       },
-      {
-        name: "User",
-        path: "/system/user",
-        meta: {
-          title: "用户管理",
-        },
-        component: () => import("../views/User.vue"),
-      },
-      {
-        name: "Menu",
-        path: "/system/menu",
-        meta: {
-          title: "用户管理",
-        },
-        component: () => import("../views/Menu.vue"),
-      },
-      {
-        name: "Role",
-        path: "/system/role",
-        meta: {
-          title: "角色管理",
-        },
-        component: () => import("../views/Role.vue"),
-      },
+      // {
+      //   name: "User",
+      //   path: "/system/user",
+      //   meta: {
+      //     title: "用户管理",
+      //   },
+      //   component: () => import("../views/User.vue"),
+      // },
+      // {
+      //   name: "Menu",
+      //   path: "/system/menu",
+      //   meta: {
+      //     title: "菜单管理",
+      //   },
+      //   component: () => import("../views/Menu.vue"),
+      // },
+      // {
+      //   name: "Role",
+      //   path: "/system/role",
+      //   meta: {
+      //     title: "角色管理",
+      //   },
+      //   component: () => import("../views/Role.vue"),
+      // },
+      // {
+      //   name: "Dept",
+      //   path: "/system/dept",
+      //   meta: {
+      //     title: "部门管理",
+      //   },
+      //   component: () => import("../views/Dept.vue"),
+      // },
     ],
   },
   {
@@ -55,11 +66,62 @@ const routes = [
     },
     component: () => import("../views/Login.vue"),
   },
+  {
+    name: "404",
+    path: "/404",
+    // 可以添加权限
+    meta: {
+      title: "页面找不到",
+    },
+    component: () => import("../views/404.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+// 动态路由
+async function loadAsyncRoutes() {
+  let userInfo = storage.getItem("userInfo") || {};
+  if (userInfo.token) {
+    try {
+      const { menuList } = await api.getPermissionList();
+      let routes = utils.generateRoute(menuList);
+      routes.map((route) => {
+        if (route.component) {
+          let url = `../views/${route.component}.vue`;
+          route.component = () => import(url);
+          router.addRoute("Home", route);
+        }
+      });
+      console.log(router.addRoute());
+    } catch (err) {}
+  }
+}
+await loadAsyncRoutes();
+
+// 判断当前前往地址是否可以访问
+// function checkPermission(path) {
+//   let hasPermission = router
+//     .getRoutes()
+//     .filter((route) => route.path == path).length;
+//   if (hasPermission) {
+//     return true;
+//   }
+//   return false;
+// }
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  if (router.hasRoute(to.name)) {
+    // 有权限则将标签页title进行改变路由meta中的title--->并进入页面
+    document.title = to.meta.title;
+    next();
+  } else {
+    next("/404");
+  }
 });
 
 export default router;
