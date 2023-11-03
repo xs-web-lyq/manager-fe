@@ -96,7 +96,6 @@ async function loadAsyncRoutes() {
           router.addRoute("Home", route);
         }
       });
-      console.log(router.addRoute());
     } catch (err) {}
   }
 }
