@@ -33,7 +33,7 @@
         </div>
 
         <div class="user-info">
-          <el-badge :is-dot="noticeCoutn > 0" class="notice" type="danger">
+          <el-badge :is-dot="noticeCount > 0" class="notice" type="danger" @click="$router.push('/audit/check')">
             <el-icon>
               <Bell />
             </el-icon>
@@ -71,7 +71,6 @@ export default {
     return {
       isCollapse: false,
       userInfo: this.$store.state.userInfo,
-      noticeCoutn: 0,
       userMenu: [],
       activeMenu: location.hash.slice(1),
       // 必须在data中返回element-plus的图标，通过使用markRaw将图标的响应性取消变为浅层引用
@@ -81,6 +80,9 @@ export default {
   computed: {
     breadList() {
       return this.$route.matched
+    },
+    noticeCount() {
+      return this.$store.state.noticeCount
     }
   },
   mounted() {
@@ -93,7 +95,7 @@ export default {
         return
       }
       this.$store.commit("saveUserInfo", '');
-      this.userInfo = null
+      this.userInfo = ''
       this.$router.push('/login')
     },
     toggle() {
@@ -101,8 +103,10 @@ export default {
     },
     async getNoticeCount() {
       try {
-        const res = await this.$api.noticeCount()
-        this.noticeCoutn = res
+        const count = await this.$api.noticeCount()
+        // 使用vuex保存count值
+        this.$store.commit('saveNoticeCount', count)
+
       } catch (err) {
         console.log(err);
       }
@@ -197,6 +201,7 @@ export default {
         .notice {
           line-height: 30px;
           margin-right: 16px;
+          cursor: pointer;
         }
 
         .nav-link {

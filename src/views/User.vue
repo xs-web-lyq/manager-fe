@@ -103,7 +103,7 @@ export default {
     // 初始化分页对象
     const pager = reactive({
       pageNum: 1,
-      pageSize: 4
+      pageSize: 10
     })
     // 动态表格格式
     data.columns = [
@@ -296,10 +296,10 @@ export default {
         if (valid) {
           // 将响应式对象转为普通对象
           let params = toRaw(userForm)
-          console.log(params);
+          // console.log(params);
           params.userEmail += '@163.com'
           params.action = action.value
-          console.log(params);
+          // console.log(params);
           const res = await proxy.$api.userSubmit(params)
           if (res) {
             showModle.value = false;

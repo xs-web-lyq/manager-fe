@@ -92,7 +92,7 @@ async function loadAsyncRoutes() {
       routes.map((route) => {
         if (route.component) {
           let url = `../views/${route.component}.vue`;
-          route.component = () => import(url);
+          route.component = () => import(url /* @vite-ignore */);
           router.addRoute("Home", route);
         }
       });
