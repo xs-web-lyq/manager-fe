@@ -2,7 +2,7 @@
   <div class="dept-manage">
     <div class="query-form">
       <el-form :inline="true" :model="queryForm" ref="queryForm">
-        <el-form-item label="部门名称">
+        <el-form-item label="部门名称" prop="deptName">
           <el-input v-model="queryForm.deptName" placeholder="请输入部门名单" />
         </el-form-item>
         <el-form-item>
@@ -35,6 +35,7 @@
           <el-input v-model="deptForm.deptName" placeholder="请输入部门名称"></el-input>
         </el-form-item>
         <el-form-item label="负责人" prop="user">
+          <!-- 添加change事件--当选中的负责人改变时邮箱同时改变 -->
           <el-select v-model="deptForm.user" placeholder="请选择部门负责人" @change="handleUser">
             <el-option v-for="item in userList" :key="item.userId" :label="item.userName"
               :value="`${item.userId}/${item.userName}/${item.userEmail}`"></el-option>
@@ -75,7 +76,7 @@ export default {
           label: '部门名称'
         },
         {
-          prop: 'username',
+          prop: 'userName',
           label: '负责人'
         },
         {
@@ -130,30 +131,35 @@ export default {
     this.getAllUserList()
   },
   methods: {
+    // 获取部门列表
     async getDeptList() {
       const list = await this.$api.getDeptList(this.queryForm)
       this.deptList = list
     },
+    // 获取用户列表，
     async getAllUserList() {
       const list = await this.$api.getAllUserList()
       this.userList = list
     },
-
+    // 更新负责人信息
     handleUser(val) {
       const [userId, userName, userEmail] = val.split('/')
       Object.assign(this.deptForm, { userEmail, userId, userName })
     },
+    // 还原输入框
     handleReset(form) {
-
       this.$refs[form].resetFields()
     },
+    // 创建部门
     handleOpen() {
       this.action = "create"
       this.showModle = true
     },
+    // 编辑部门
     handleEdit(row) {
       this.action = 'edit'
       this.showModle = true
+      // 
       this.$nextTick(() => {
         Object.assign(this.deptForm, row, { user: `${row.userId}/${row.userName}/${row.userEmail}` })
       })

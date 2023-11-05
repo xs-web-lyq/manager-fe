@@ -47,7 +47,6 @@ export default {
     login() {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
-
           this.$api.login(this.user).then(async (res) => {
             this.$store.commit("saveUserInfo", res)
             await this.loadAsyncRoutes

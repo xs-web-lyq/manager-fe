@@ -1,5 +1,6 @@
 <template>
   <div class="basic-layout">
+    <!--  通过isCollapse来控制侧边栏的长度，，home页布局为左右布局所以，使用导航固定宽，右侧自适应的方式进行布局 -->
     <div :class="['nav-side', isCollapse ? 'unfold' : 'fold']">
       <!-- logo -->
       <div class="logo">
@@ -9,13 +10,13 @@
       <!-- 导航菜单 -->
       <el-menu :default-active="activeMenu" router :collapse="isCollapse" class="nav-menu">
         <TreeMenu :userMenu="userMenu" />
-
       </el-menu>
     </div>
     <div class="content-right">
       <div class="nav-top">
         <div class="nav-left">
           <div class="menu-fold">
+            <!-- 控制是否展开导航栏 -->
             <el-icon @click="toggle">
               <Expand />
             </el-icon>
@@ -23,7 +24,9 @@
           <div class="bread">
             <!-- 由于未知原因抽离出组件之后不能显示--退而求其次不再进行抽离 -->
             <el-breadcrumb :separator-icon="ArrowRight">
+              <!-- 循环面包屑--因为目录只有两级所以只需要给首页栏跳转功能即可 -->
               <el-breadcrumb-item v-for="(item, index) in breadList" :key="item.path">
+                <!-- 使用if-else 进行循环条件判断显示数据 -->
                 <router-link to="/welcome" v-if="index == 0"> {{ item.meta.title }}</router-link>
                 <span v-else>{{ item.meta.title }}</span>
               </el-breadcrumb-item>
@@ -33,11 +36,13 @@
         </div>
 
         <div class="user-info">
+          <!-- 铃铛提示设置--设置跳转到待审批页面 -->
           <el-badge :is-dot="noticeCount > 0" class="notice" type="danger" @click="$router.push('/audit/check')">
             <el-icon>
               <Bell />
             </el-icon>
           </el-badge>
+          <!-- 用户信息下拉菜单显示 -->
           <el-dropdown @command="handleLogout" class="nav-link">
             <el-button class="nav-btn">
               {{ userInfo.userName }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -88,8 +93,10 @@ export default {
   mounted() {
     this.getNoticeCount()
     this.getMenuList()
+    console.log(this.$route.matched);
   },
   methods: {
+    // 添加下拉菜单点击事件-退出登录清楚本地缓存信息
     handleLogout(key) {
       if (key == 'email') {
         return

@@ -1,7 +1,9 @@
 <template>
   <div class="user-manage">
     <div class="query-form">
+      <!-- :model="user" 绑定查询数据 -->
       <el-form :inline="true" :model="user" ref="ruleFormRef">
+        //
         <el-form-item label="用户ID" prop="userId">
           <el-input v-model="user.userId" placeholder="请输入用户ID" />
         </el-form-item>
@@ -19,16 +21,19 @@
         <el-form-item>
           <el-button type="primary" @click="handleQuery">查询</el-button>
         </el-form-item>
+        <!-- 通过ref绑定表单进行重置 -->
         <el-form-item>
           <el-button @click="handleReset('ruleFormRef')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="base-table">
+      <!-- 通过自定义指令来控制按钮显示与隐藏 -->
       <div class="action">
-        <el-button type="primary" @click="handleCreate" v-has:add="'user-create'">新增</el-button>
+        <el-button type="primary" @click="handleCreate" v-has="'user-create'">新增</el-button>
         <el-button type="danger" @click="handlePatchDel" v-has="'user-patch-delete'">批量删除</el-button>
       </div>
+      <!-- @selection-change="handleSelectionChange" 多选事件获取选定_id提供批量删除数据 -->
       <el-table :data="userList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width"
@@ -36,11 +41,13 @@
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template #default="scope">
+            <!-- scope.row 获取一行数据 -->
             <el-button type="primary" size="small" @click="handleEdit(scope.row)" v-has="'user-edit'">编辑</el-button>
             <el-button type="danger" size="small" @click="handleDel(scope.row)" v-has="'user-delete'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- :total控制数据数量 :page-size设置一页数据条数 通过 @current-change事件控制页面切换-->
       <el-pagination class="pagination" background layout="prev, pager, next" :total="pager.total"
         :page-size="pager.pageSize" @current-change="handleCurrentChange" />
     </div>
@@ -51,6 +58,7 @@
         </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
           <el-input v-model="userForm.userEmail" :disabled="action === 'edit'" placeholder="请输入用户邮箱">
+            <!-- input框插槽追加 -->
             <template #append> @163.com </template>
           </el-input>
         </el-form-item>
@@ -122,6 +130,7 @@ export default {
       {
         label: '用户角色',
         prop: 'role',
+        // 规则校验对当前数据进行格式转换
         formatter(row, column, value) {
           return {
             0: "管理员",
@@ -144,6 +153,7 @@ export default {
         label: '注册时间',
         prop: 'createTime',
         width: 180,
+        // 时间格式化
         formatter(row, column, value) {
           return utils.formateDate(new Date(value))
         }

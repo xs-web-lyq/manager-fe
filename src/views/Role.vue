@@ -116,8 +116,11 @@ export default {
           width: 200,
           formatter: (row, column, value) => {
             let names = []
+            // 获取当前角色的菜单列表_id
             let list = value.halfCheckedKeys || []
+            // 遍历菜单列表_id
             list.map(key => {
+              // 与全量的过滤过后的菜单列表比对获取权限名称
               let name = this.actionMap[key]
               if (key && name) names.push(name)
             })
@@ -168,11 +171,11 @@ export default {
       try {
         const list = await this.$api.getMenuList()
         this.menuList = list
+        // 将
         this.getActionMap(list)
       } catch (err) {
         console.log(err);
       }
-
     },
     // 角色创建
     handleAdd() {
@@ -221,23 +224,26 @@ export default {
       this.getRoleList()
     },
     handleOpenPermission(row) {
-      console.log(row);
+      // 保存当前角色_id以备提交更改使用
       this.curRoleId = row._id
+      // 用于弹框页显示使用
       this.curRoleName = row.roleName
+
       this.showPermission = true
+      // 获取按钮_id
       let { checkedKeys } = row.permissionList
+      // 设置宏任务来解决弹框权限初始化问题
       setTimeout(() => {
         this.$refs.permissionTree.setCheckedKeys(checkedKeys)
       })
-
-
     },
     async handlePermissionSubmit() {
+      // 获取选中的节点其可能包括，菜单所以需要用节点中是否拥有children加进行过滤
       let nodes = this.$refs.permissionTree.getCheckedNodes();
+      // 获得半选状态下的节点_id
       let halfKeys = this.$refs.permissionTree.getHalfCheckedKeys()
       let checkedKeys = []
       let parentKeys = []
-      console.log(nodes);
       nodes.map((node) => {
         if (!node.children) {
           checkedKeys.push(node._id)
@@ -249,6 +255,7 @@ export default {
         _id: this.curRoleId,
         permissionList: {
           checkedKeys,
+          // 合并半选状态节点和全选状态的菜单节点id
           halfCheckedKeys: parentKeys.concat(halfKeys),
         }
       }

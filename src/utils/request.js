@@ -5,6 +5,7 @@
 import axios from "axios";
 import config from "../config";
 
+// 使用Element-plus,中的组件ELMessage进行对事件进行提醒
 import { ElMessage } from "element-plus";
 import storage from "./storage";
 
