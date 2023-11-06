@@ -1,56 +1,16 @@
 <template>
   <div class="user-manage">
     <div class="query-form">
-      <!-- :model="user" 绑定查询数据 -->
-      <el-form :inline="true" :model="user" ref="ruleFormRef">
-        //
-        <el-form-item label="用户ID" prop="userId">
-          <el-input v-model="user.userId" placeholder="请输入用户ID" />
-        </el-form-item>
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="user.userName" placeholder="请输入用户名称" />
-        </el-form-item>
-        <el-form-item label="状态" prop="state">
-          <el-select v-model="user.state">
-            <el-option :value="0" label="所有"></el-option>
-            <el-option :value="1" label="在职"></el-option>
-            <el-option :value="2" label="离职"></el-option>
-            <el-option :value="3" label="试用期"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleQuery">查询</el-button>
-        </el-form-item>
-        <!-- 通过ref绑定表单进行重置 -->
-        <el-form-item>
-          <el-button @click="handleReset('ruleFormRef')">重置</el-button>
-        </el-form-item>
-      </el-form>
+      <query-form :form="form" v-model="user" @handleQuery="handleQuery"></query-form>
     </div>
-    <div class="base-table">
-      <!-- 通过自定义指令来控制按钮显示与隐藏 -->
-      <div class="action">
+    <base-table :pager="pager" :columns="columns" :data="userList" @select-change="handleSelectionChange"
+      @handleAction="handleAction" @handleCurrentChange="handleCurrentChange">
+      <template v-slot="action">
         <el-button type="primary" @click="handleCreate" v-has="'user-create'">新增</el-button>
         <el-button type="danger" @click="handlePatchDel" v-has="'user-patch-delete'">批量删除</el-button>
-      </div>
-      <!-- @selection-change="handleSelectionChange" 多选事件获取选定_id提供批量删除数据 -->
-      <el-table :data="userList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" />
-        <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width"
-          :key="item.prop" :formatter="item.formatter">
-        </el-table-column>
-        <el-table-column label="操作" width="180">
-          <template #default="scope">
-            <!-- scope.row 获取一行数据 -->
-            <el-button type="primary" size="small" @click="handleEdit(scope.row)" v-has="'user-edit'">编辑</el-button>
-            <el-button type="danger" size="small" @click="handleDel(scope.row)" v-has="'user-delete'">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- :total控制数据数量 :page-size设置一页数据条数 通过 @current-change事件控制页面切换-->
-      <el-pagination class="pagination" background layout="prev, pager, next" :total="pager.total"
-        :page-size="pager.pageSize" @current-change="handleCurrentChange" />
-    </div>
+      </template>
+    </base-table>
+
     <el-dialog title="新增用户" v-model="showModle">
       <el-form ref="logoForm" :model="userForm" label-width="100" :rules="rules">
         <el-form-item label="用户名" prop="userName">
@@ -100,7 +60,11 @@
 <script>
 import { onMounted, ref, reactive, toRefs, getCurrentInstance, toRaw } from 'vue'
 import utils from '../utils/utils'
+import QueryForm from '../../packages/QueryForm/QueryForm.vue'
+
+import BaseTable from '../../packages/BaseTable/BaseTable.vue'
 export default {
+  components: { QueryForm, BaseTable },
   name: "User",
   // Composition API
   setup() {
@@ -111,10 +75,52 @@ export default {
     // 初始化分页对象
     const pager = reactive({
       pageNum: 1,
-      pageSize: 10
+      pageSize: 4
     })
+    // 定义输入自定义组件的参数 -- 相当于用户输入的自定义json
+    const form = [
+      {
+        type: 'input',
+        label: '用户ID',
+        model: "userId",
+        placeholder: "请输入用户ID"
+      },
+      {
+        type: 'input',
+        label: '用户名称',
+        model: "userName",
+        placeholder: "请输入用户名称"
+      },
+      {
+        type: 'select',
+        label: '状态',
+        model: "state",
+        placeholder: "请输入状态",
+        options: [
+          {
+            label: "所以",
+            value: 0
+          },
+          {
+            label: "在职",
+            value: 1
+          }, {
+            label: "离职",
+            value: 2
+          },
+          {
+            label: "试用期",
+            value: 3
+          }
+
+        ]
+      },
+    ]
     // 动态表格格式
     data.columns = [
+      {
+        type: "selection"
+      },
       {
         label: '用户ID',
         prop: 'userId'
@@ -167,6 +173,21 @@ export default {
           return utils.formateDate(new Date(value))
         }
       },
+      {
+        label: '操作',
+        type: 'action',
+        width: 180,
+        list: [
+          {
+            text: "编辑",
+            type: "primary"
+
+          }, {
+            text: "删除",
+            type: "danger"
+          }
+        ]
+      }
     ]
     // 弹框显示
     let showModle = ref(false)
@@ -234,8 +255,16 @@ export default {
       }
     }
     // 查询事件，获取用户列表
-    const handleQuery = () => {
+    const handleQuery = (params) => {
+      data.user = params
       getUserList()
+    }
+    const handleAction = ({ index, row }) => {
+      if (index == 0) {
+        handleEdit(row)
+      } else if (index == 1) {
+        handleDel(row)
+      }
     }
     // 重置查询表单
     const handleReset = (form) => {
@@ -334,7 +363,7 @@ export default {
     }
     const { user, columns, userList } = toRefs(data)
     return {
-      user, value, columns, userList, action,
+      user, value, columns, userList, action, form, handleAction,
       handleQuery, handleReset, pager, handleCurrentChange,
       handlePatchDel, handleDel, handleSelectionChange,
       checkedUserIds, handleCreate, showModle, userForm, rules,

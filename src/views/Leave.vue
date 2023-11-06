@@ -22,7 +22,7 @@
     </div>
     <div class="base-table">
       <div class="action">
-        <el-button type="primary" @click="handleApply">申请休假</el-button>
+        <el-button type="primary" @click="handleApply" v-has="'leave-create'">申请休假</el-button>
       </div>
       <el-table :data="leaveList">
         <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width"
@@ -30,10 +30,10 @@
         </el-table-column>
         <el-table-column label="操作" width="180">
           <template #default="scope">
-            <el-button type="primary" @click="handleDetail(scope.row)">查看</el-button>
+            <el-button type="primary" @click="handleDetail(scope.row)" v-has="'leave-query'">查看</el-button>
             <!-- 当状态为审批中和待审批时才可以进行作废，使用es6新增语法判断数组中是否存在某个值使用includes()进行判断 -->
-            <el-button type="danger" @click="handleDel(scope.row._id)"
-              v-if="[1, 2].includes(scope.row.applyState)">作废</el-button>
+            <el-button type="danger" @click="handleDel(scope.row._id)" v-if="[1, 2].includes(scope.row.applyState)"
+              v-has="'leave-delete'">作废</el-button>
           </template>
         </el-table-column>
       </el-table>

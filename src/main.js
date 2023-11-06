@@ -10,6 +10,9 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import api from "./api";
 import store from "./store";
 
+// 引入自定义插件
+import Rockt from "./../packages/index";
+
 const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
@@ -40,4 +43,4 @@ app.config.globalProperties.$request = request;
 app.config.globalProperties.$storage = storage;
 app.config.globalProperties.$api = api;
 
-app.use(router).use(store).use(ElementPlus).mount("#app");
+app.use(router).use(store).use(Rockt).use(ElementPlus).mount("#app");

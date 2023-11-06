@@ -15,7 +15,7 @@
     </div>
     <div class="base-table">
       <div class="action">
-        <el-button type="primary" @click="handleAdd">创建</el-button>
+        <el-button type="primary" @click="handleAdd" v-has="'role-create'">创建</el-button>
       </div>
       <el-table :data="roleList" row-key="_id" :tree-props="{ children: 'children' }">
         <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width"
@@ -23,9 +23,10 @@
         </el-table-column>
         <el-table-column label="操作" width="220">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="primary" size="small" @click="handleOpenPermission(scope.row)">设置权限</el-button>
-            <el-button type="danger" size="small" @click="handleDel(scope.row._id)">删除</el-button>
+            <el-button type="primary" size="small" @click="handleEdit(scope.row)" v-has="'role-edit'">编辑</el-button>
+            <el-button type="primary" size="small" @click="handleOpenPermission(scope.row)"
+              v-has="'role-edit'">设置权限</el-button>
+            <el-button type="danger" size="small" @click="handleDel(scope.row._id)" v-has="'dept-delete'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
