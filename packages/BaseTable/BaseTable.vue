@@ -2,7 +2,7 @@
   <div class="base-table">
     <!-- 通过自定义指令来控制按钮显示与隐藏 -->
     <div class="action">
-      <slot name="action"></slot>
+      <slot name="actions"></slot>
     </div>
     <!-- @selection-change="handleSelectionChange" 多选事件获取选定_id提供批量删除数据 -->
     <el-table v-bind="$attrs">
@@ -14,7 +14,8 @@
           <!-- 自定义插槽获取当前行值 -->
           <template #default="scope">
             <template v-for="(btn, index) in item.list">
-              <el-button :type="btn.type" @click="handleAction(index, scope.row)">{{ btn.text }}</el-button>
+              <el-button :type="btn.type" @click="handleAction(index, scope.row)" v-has="btn.icon">{{ btn.text
+                }}</el-button>
             </template>
           </template>
         </el-table-column>
@@ -50,5 +51,10 @@ export default {
 .pagination {
   justify-content: flex-end;
   padding: 8px 20px;
+}
+
+.action {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
 }
 </style>

@@ -11,6 +11,7 @@ import storage from "./storage";
 
 const TOKEN_INVALID = "Token认证失败,请重新登录";
 const NETWORK_ERROR = "网络异常，稍后重试";
+const USERINFO_ERROR = "用户名或密码错误";
 
 // 实例化axiox，被指全局请求配置
 const instance = axios.create({
@@ -25,7 +26,7 @@ instance.interceptors.request.use((req) => {
   const headers = req.headers;
 
   // JWT--token处理
-  const { token } = storage.getItem("userInfo");
+  const { token } = storage.getItem("userInfo") || {};
   if (!headers.Authorization) headers.Authorization = "Bearer " + token;
   return req;
 });
@@ -42,8 +43,11 @@ instance.interceptors.response.use((res) => {
     //   this.$router.push({ name: "Login" });
     // }, 1000);
     return Promise.reject(TOKEN_INVALID);
+  } else if (code === 40001) {
+    ElMessage.error(USERINFO_ERROR);
+    return Promise.reject(USERINFO_ERROR);
   } else {
-    ElMessage.error(msg || NETWORK_ERROR);
+    ElMessage.error(NETWORK_ERROR);
     return Promise.reject(msg || NETWORK_ERROR);
   }
 });

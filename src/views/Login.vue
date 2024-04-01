@@ -2,7 +2,7 @@
   <div class="login-wrapper">
     <div class="modal">
       <el-form :model="user" ref="userForm" :rules="rules">
-        <div class="title">天王星</div>
+        <div class="title">请假咯</div>
         <el-form-item prop="userName">
           <el-input type="text" placeholder="请输入账号" prefix-icon="User" v-model="user.userName">
           </el-input>
@@ -14,6 +14,11 @@
           <el-button class="login-btn" type="primary" @click="login">登录</el-button>
         </el-form-item>
       </el-form>
+      <div class="footer">
+        <div class="test">测试账号</div>
+        <div class="userName">username: test</div>
+        <div class="passwd">password: 123456</div>
+      </div>
     </div>
   </div>
 </template>
@@ -143,6 +148,25 @@ export default {
     .login-btn {
       width: 100%;
     }
+
+    .footer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      width: 200px;
+      height: 100px;
+      background-color: #e5f0fb;
+      border: 1px solid rgba(123, 121, 121, 0.5);
+      border-radius: 5px;
+
+      div {
+        margin: 5px 0;
+        font-size: 14px;
+      }
+    }
+
   }
 }
 </style>

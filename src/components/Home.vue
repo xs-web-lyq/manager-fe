@@ -69,6 +69,8 @@ import TreeMenu from './TreeMenu.vue'
 // import BreadCrumb from './BreadCrumb.vue'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { markRaw } from 'vue'
+// import {router} from 'vue-router'
+import utils from "../utils/utils";
 export default {
   name: 'Home',
   components: { TreeMenu },
@@ -93,7 +95,7 @@ export default {
   mounted() {
     this.getNoticeCount()
     this.getMenuList()
-    console.log(this.$route.matched);
+    // console.log(this.$route.matched);
   },
   methods: {
     // 添加下拉菜单点击事件-退出登录清楚本地缓存信息
@@ -113,7 +115,6 @@ export default {
         const count = await this.$api.noticeCount()
         // 使用vuex保存count值
         this.$store.commit('saveNoticeCount', count)
-
       } catch (err) {
         console.log(err);
       }
@@ -121,13 +122,40 @@ export default {
     async getMenuList() {
       try {
         const { menuList, actionList } = await this.$api.getPermissionList()
+        // console.log(menuList);
         this.userMenu = menuList
+        console.log(this.userMenu);
         this.$store.commit("saveMenuList", menuList)
+        await this.loadAsyncRoutes(JSON.parse(JSON.stringify(menuList)))
         this.$store.commit("saveActionList", actionList)
+
+
       } catch (err) {
         console.log(err);
       }
 
+    },
+    async loadAsyncRoutes(menuList) {
+      let userInfo = this.$storage.getItem("userInfo") || {};
+
+
+      if (userInfo.token) {
+        try {
+          let routes = utils.generateRoute(menuList);
+          const components = import.meta.glob("../views/*.vue");
+          routes.map((route) => {
+            const componentPath = `../views/${route.component}.vue`;
+            const componentModule = components[componentPath] || null;
+
+            if (componentModule) {
+              route.component = componentModule;
+              this.$router.addRoute("Home", route);
+            }
+          });
+        } catch (err) {
+          return err
+        }
+      }
     }
 
   }

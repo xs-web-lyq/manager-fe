@@ -10,7 +10,7 @@ export default {
       url: "/users/login",
       data: params,
       method: "post",
-      mock: false,
+      // mock:true,
     });
   },
   noticeCount(params) {
@@ -18,7 +18,7 @@ export default {
       url: "/leave/count",
       method: "get",
       data: {},
-      mock: false,
+      // mock:true,
     });
   },
   getMenuList(params) {
@@ -26,7 +26,7 @@ export default {
       url: "/menu/list",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getUserList(params) {
@@ -34,7 +34,7 @@ export default {
       url: "/users/list",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getAllUserList(params) {
@@ -42,7 +42,7 @@ export default {
       url: "/users/all/list",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getPermissionList() {
@@ -50,7 +50,7 @@ export default {
       url: "/users/getPermissionList",
       method: "get",
       data: {},
-      mock: false,
+      // mock:true,
     });
   },
   userDel(params) {
@@ -58,7 +58,7 @@ export default {
       url: "/users/delete",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getRoleAllList(params) {
@@ -66,7 +66,7 @@ export default {
       url: "/roles/allList",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getRoleList(params) {
@@ -74,7 +74,7 @@ export default {
       url: "/roles/list",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getDeptList(params) {
@@ -82,7 +82,7 @@ export default {
       url: "/dept/list",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   deptOperate(params) {
@@ -90,7 +90,7 @@ export default {
       url: "/dept/operate",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   userSubmit(params) {
@@ -98,7 +98,7 @@ export default {
       url: "/users/operate",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   menuSubmit(params) {
@@ -106,7 +106,7 @@ export default {
       url: "/menu/operate",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   roleSubmit(params) {
@@ -114,7 +114,7 @@ export default {
       url: "/roles/operate",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   updatePermission(params) {
@@ -122,7 +122,7 @@ export default {
       url: "/roles/update/permission",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   getLeaveList(params) {
@@ -130,7 +130,7 @@ export default {
       url: "/leave/list",
       method: "get",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   leaveOperate(params) {
@@ -138,7 +138,7 @@ export default {
       url: "/leave/operate",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
   leaveApprove(params) {
@@ -146,7 +146,7 @@ export default {
       url: "/leave/approve",
       method: "post",
       data: params,
-      mock: false,
+      // mock:true,
     });
   },
 };

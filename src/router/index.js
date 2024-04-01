@@ -3,6 +3,10 @@ import Home from "../components/Home.vue";
 import storage from "../utils/storage";
 import api from "../api";
 import utils from "../utils/utils";
+import { ElMessage } from "element-plus";
+import store from "../store/index.js";
+
+const components = import.meta.glob("./../views/*.vue");
 
 const routes = [
   {
@@ -23,38 +27,6 @@ const routes = [
         },
         component: () => import("../views/Welcome.vue"),
       },
-      // {
-      //   name: "User",
-      //   path: "/system/user",
-      //   meta: {
-      //     title: "用户管理",
-      //   },
-      //   component: () => import("../views/User.vue"),
-      // },
-      // {
-      //   name: "Menu",
-      //   path: "/system/menu",
-      //   meta: {
-      //     title: "菜单管理",
-      //   },
-      //   component: () => import("../views/Menu.vue"),
-      // },
-      // {
-      //   name: "Role",
-      //   path: "/system/role",
-      //   meta: {
-      //     title: "角色管理",
-      //   },
-      //   component: () => import("../views/Role.vue"),
-      // },
-      // {
-      //   name: "Dept",
-      //   path: "/system/dept",
-      //   meta: {
-      //     title: "部门管理",
-      //   },
-      //   component: () => import("../views/Dept.vue"),
-      // },
     ],
   },
   {
@@ -84,22 +56,41 @@ const router = createRouter({
 
 // 动态路由
 async function loadAsyncRoutes() {
+  // console.log(1111)
   let userInfo = storage.getItem("userInfo") || {};
+  // console.log(userInfo)
   if (userInfo.token) {
     try {
-      const { menuList } = await api.getPermissionList();
+      const menuList = storage.getItem("menuList");
+      // debugger
+      // console.log(menuList)
       let routes = utils.generateRoute(menuList);
+
       routes.map((route) => {
-        if (route.component) {
-          let url = `../views/${route.component}.vue`;
-          route.component = () => import(url /* @vite-ignore */);
+        const componentPath = `../views/${route.component}.vue`;
+        const componentModule = components[componentPath] || null;
+
+        if (componentModule) {
+          route.component = componentModule;
           router.addRoute("Home", route);
         }
       });
-    } catch (err) {}
+    } catch (err) {
+      return err;
+    }
   }
 }
-await loadAsyncRoutes();
+const p1 = new Promise((resolve, reject) => {
+  loadAsyncRoutes().then((res) => {
+    resolve(res);
+  });
+});
+
+p1.then((res) => {
+  console.log("动态路由配置成功", res);
+}).catch((err) => {
+  console.log("动态路由配置失败");
+});
 
 // 判断当前前往地址是否可以访问
 // function checkPermission(path) {
@@ -114,6 +105,15 @@ await loadAsyncRoutes();
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
+  // console.log(store);
+  if (!store.state.userInfo.token && to.name != "Login") {
+    ElMessage({
+      message: "亲你还没有登陆哦！请先登陆再访问哟✨✨✨",
+      type: "warning",
+    });
+    router.push("/login");
+    return;
+  }
   if (router.hasRoute(to.name)) {
     // 有权限则将标签页title进行改变路由meta中的title--->并进入页面
     document.title = to.meta.title;

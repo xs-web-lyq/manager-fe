@@ -24,7 +24,7 @@
         <el-button type="primary" @click="handleAdd(1)" v-has="'menu-create'">新增</el-button>
       </div>
       <!-- 树形数据是指数据中存在children时被认为是树形数据，展示树形数据需要配置row-key为数据的_id值，如果渲染数据的键值与要求字段不符合时通过:tree-props="{}"进行映射  -->
-      <el-table :data="menuList" row-key="_id" :tree-props="{ children: 'children' }">
+      <el-table class="table-info" :data="menuList" row-key="_id" :tree-props="{ children: 'children' }">
         <el-table-column v-for="item in columns" :prop="item.prop" :label="item.label" :width="item.width"
           :key="item.prop" :formatter="item.formatter">
         </el-table-column>
@@ -259,6 +259,11 @@ export default {
   .action {
     padding: 15px;
     border-bottom: 1px solid #eee;
+  }
+
+  .table-info {
+    max-height: calc(100vh - 180px);
+    overflow-y: scroll;
   }
 }
 

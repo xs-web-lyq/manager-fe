@@ -1,9 +1,9 @@
 <template>
   <div class="welcome">
     <div class="content">
-      <div class="sub-title">欢迎体验</div>
-      <div class="title">慕课通用后台管理系统</div>
-      <div class="desc">- Vue3.0+ElementPlus+Node+Mongo打造通用后台管理系统</div>
+      <div class="sub-title">欢迎使用</div>
+      <div class="title">请休假后台管理系统</div>
+      <div class="desc">- Vue3.0+ElementPlus+Node+Mongo打造请休假后台管理系统</div>
     </div>
     <div class="img"></div>
   </div>
@@ -52,4 +52,5 @@ export default {
     width: 371px;
     height: 438px;
   }
-}</style>
+}
+</style>

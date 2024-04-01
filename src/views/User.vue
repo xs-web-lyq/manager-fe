@@ -5,12 +5,11 @@
     </div>
     <base-table :pager="pager" :columns="columns" :data="userList" @select-change="handleSelectionChange"
       @handleAction="handleAction" @handleCurrentChange="handleCurrentChange">
-      <template v-slot="action">
+      <template #actions>
         <el-button type="primary" @click="handleCreate" v-has="'user-create'">新增</el-button>
         <el-button type="danger" @click="handlePatchDel" v-has="'user-patch-delete'">批量删除</el-button>
       </template>
     </base-table>
-
     <el-dialog title="新增用户" v-model="showModle">
       <el-form ref="logoForm" :model="userForm" label-width="100" :rules="rules">
         <el-form-item label="用户名" prop="userName">
@@ -180,10 +179,12 @@ export default {
         list: [
           {
             text: "编辑",
+            icon: 'user-edit',
             type: "primary"
 
           }, {
             text: "删除",
+            icon: 'user-delete',
             type: "danger"
           }
         ]
@@ -255,8 +256,8 @@ export default {
       }
     }
     // 查询事件，获取用户列表
-    const handleQuery = (params) => {
-      data.user = params
+    const handleQuery = () => {
+      // data.user = params
       getUserList()
     }
     const handleAction = ({ index, row }) => {
