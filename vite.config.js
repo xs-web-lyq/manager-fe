@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { createHtmlPlugin } from "vite-plugin-html";
 import externalGlobals from "rollup-plugin-external-globals";
-import viteComppression from "vite-plugin-compression";
+// import viteComppression from "vite-plugin-compression";
 import path from "path";
 import terser from "@rollup/plugin-terser";
 import { visualizer } from "rollup-plugin-visualizer";
